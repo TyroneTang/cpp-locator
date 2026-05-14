@@ -8,8 +8,8 @@
         "type": "lldb",
         "request": "launch",
         "name": "Debug with lldb",
-        //   "program": "${workspaceFolder}/build/linux-clang/Debug/Rocket",
-        "program": "${workspaceFolder}/build/linux-gcc/Debug/Locator",
+        "program": "${workspaceFolder}/service/build/linux-clang/Debug/Locator",
+        // "program": "${workspaceFolder}/service/build/linux-gcc/Debug/Locator",
         "args": [],
         "cwd": "${workspaceFolder}"
       }
