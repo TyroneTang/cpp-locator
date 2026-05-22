@@ -18,7 +18,7 @@ export struct RedisConfig {
     const std::string& password;
 };
 
-export struct SQLConfig {
+export struct QDBConfig {
     const std::string& ip_address;
     const uint16_t& port;
     const std::string& username;

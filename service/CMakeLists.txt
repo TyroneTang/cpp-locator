@@ -11,6 +11,15 @@ set(CXX_STANDARD_REQUIRED ON) #Make C++23 a hard requirement
 set(CMAKE_CXX_STANDARD 23) # Default C++ standard for targets
 set(CMAKE_CXX_SCAN_FOR_MODULES ON)
 
+include(FetchContent)
+FetchContent_Declare(
+    questdb_client
+    GIT_REPOSITORY https://github.com/questdb/c-questdb-client.git
+    GIT_TAG        main
+)
+FetchContent_MakeAvailable(questdb_client)
+
+
 find_package(Drogon CONFIG REQUIRED)
 
 #We're using the project name as the target name, but you can change it to make them different.
@@ -23,12 +32,17 @@ target_sources(${PROJECT_NAME}
         src/configurations/configuration.cppm
         src/configurations/models.cppm
 )
-target_link_libraries(${PROJECT_NAME} PRIVATE Drogon::Drogon)
+target_link_libraries(${PROJECT_NAME} PRIVATE 
+        Drogon::Drogon
+        questdb_client   # ILP writes
+        pq               # libpq for reads (apt install libpq-dev)
+)
 
 target_compile_options(${PROJECT_NAME} PRIVATE
-        -Werror # all warnings are treated as errors
-        -Wall # enable all common warnings
-        -Wextra # all extra warnings
-        -Wconversion # narrow type conversion
+        -Werror
+        -Wall
+        -Wextra
+        -Wconversion
         -Wshadow
+        -pedantic-errors
 )

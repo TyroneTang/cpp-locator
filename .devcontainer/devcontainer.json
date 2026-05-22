@@ -2,12 +2,24 @@
   "name": "ip-locator",
   "dockerComposeFile": "./docker-compose.yaml",
   "service": "devcontainer",
-  "runServices": ["devcontainer"],
+  "runServices": [
+    "devcontainer",
+    "redis",
+    "questdb"
+  ],
   "workspaceFolder": "/workspace/project",
   "remoteUser": "devuser",
   "containerUser": "devuser",
   "updateRemoteUserUID": true,
   "shutdownAction": "stopCompose",
+  "forwardPorts": [6379, 8812, 9000, 9009],
+  "portsAttributes": {
+    "6379": { "label": "Redis" },
+    "8812": { "label": "QuestDB (Postgres wire)" },
+    "9000": { "label": "QuestDB (HTTP/UI)" },
+    "9009": { "label": "QuestDB (ILP)" }
+  },
+  "otherPortsAttributes": { "onAutoForward": "silent" },
   // "postStartCommand": ".devcontainer/post_start_command.sh",
   "customizations": {
     "vscode": {
@@ -31,7 +43,7 @@
         "vadimcn.vscode-lldb",
         "ms-azuretools.vscode-docker",
         "docker.docker",
-        "anthropic.claude-code",
+        "anthropic.claude-code"
       ]
       // "settings": {
       //   "editor.formatOnSave": true,

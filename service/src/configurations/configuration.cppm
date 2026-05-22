@@ -47,10 +47,10 @@ export class ConfigurationParser {
         std::string redis_password;
 
         // database
-        std::string sql_ip;
-        std::uint16_t sql_port;
-        std::string sql_username;
-        std::string sql_password;
+        std::string qdb_ip;
+        std::uint16_t qdb_port;
+        std::string qdb_username;
+        std::string qdb_password;
 
     public:
         ConfigurationParser() {
@@ -65,10 +65,10 @@ export class ConfigurationParser {
             redis_username = read_env("REDIS_USERNAME");
             redis_password = read_env("REDIS_PASSWORD");
 
-            sql_ip = read_env("SQL_IP");
-            sql_port = parse_port(read_env("SQL_PORT"));
-            sql_username = read_env("SQL_USERNAME");
-            sql_password = read_env("SQL_PASSWORD");
+            qdb_ip = read_env("QDB_IP");
+            qdb_port = parse_port(read_env("QDB_PORT"));
+            qdb_username = read_env("QDB_USERNAME");
+            qdb_password = read_env("QDB_PASSWORD");
         }
 
         ServiceConfig get_service_configuration() {
@@ -87,12 +87,12 @@ export class ConfigurationParser {
             };
         }
 
-        SQLConfig get_sql_configuration() {
-            return SQLConfig {
-                .ip_address = sql_ip,
-                .port = sql_port,
-                .username = sql_username,
-                .password = sql_password
+        QDBConfig get_qdb_configuration() {
+            return QDBConfig {
+                .ip_address = qdb_ip,
+                .port = qdb_port,
+                .username = qdb_username,
+                .password = qdb_password
             };
         }
 };

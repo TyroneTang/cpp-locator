@@ -95,7 +95,8 @@ RUN --mount=target=/var/lib/apt/lists/cpp_base,type=cache,sharing=locked \
     libjsoncpp-dev \
     uuid-dev \
     zlib1g-dev \
-    openssl libssl-dev
+    openssl libssl-dev \
+    libpq-dev
 
 # ---------- Workspace / Non-root user --------------- #
 # Rename pre-existing ubuntu user (UID 1000) to devuser, with /workspace as home
@@ -116,6 +117,10 @@ RUN echo "devuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 RUN mkdir -p /opt/vcpkg && chown -R devuser:devuser /opt/vcpkg
 
 USER devuser
+
+# ---------- Rust --------------- #
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
+ENV PATH="/workspace/.cargo/bin:${PATH}"
 
 RUN git clone https://github.com/microsoft/vcpkg.git /opt/vcpkg && \
     /opt/vcpkg/bootstrap-vcpkg.sh

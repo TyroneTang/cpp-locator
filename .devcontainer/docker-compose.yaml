@@ -21,7 +21,7 @@ services:
       - /etc/ssl/certs:/etc/ssl/certs
       - $HOME/.gitconfig:/workspace/.gitconfig
       - $HOME/.ssh:/workspace/.ssh:ro
-      - $HOME/.bashrc:/workspace/.bashrc
+      # - $HOME/.bashrc:/workspace/.bashrc
       - $HOME/.claude:/workspace/.claude
 
   redis:
@@ -36,3 +36,44 @@ services:
       - seccomp:unconfined
     cap_add:
       - ALL
+    environment:
+      REDIS_PASSWORD: redis-12345
+      REDIS_USERNAME: redispassword
+    volumes:
+      - $PWD/redisdb/data:/data
+    command:
+      - redis-server
+      - --requirepass
+      - "${REDIS_PASSWORD}"
+      - --user
+      - "${REDIS_USERNAME}"
+      - "on"
+      - ">${REDIS_PASSWORD}"
+      - "~*"
+      - "&*"
+      - "+@all"
+
+  questdb:
+    container_name: questdb-locator
+    image: localhost/questdb:9.3.5
+    network_mode: "host"
+    tty: true
+    stdin_open: true
+    privileged: true
+    restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined
+    cap_add:
+      - ALL
+    environment:
+      # Auth — QDB_ prefix maps to server.conf keys (dots → underscores)
+      - QDB_PG_USER=${QUESTDB_USERNAME}
+      - QDB_PG_PASSWORD=${QUESTDB_PASSWORD}
+      # Memory (adjust to your machine)
+      - JVM_PREPEND=-Xms512m -Xmx2g
+      # Workers
+      - QDB_SHARED_WORKER_COUNT=2
+      - QDB_PG_WORKER_COUNT=1
+      - QDB_LINE_TCP_WRITER_WORKER_COUNT=1
+    volumes:
+      - $PWD/questdb/data:/var/lib/questdb

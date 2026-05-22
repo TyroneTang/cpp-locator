@@ -13,10 +13,14 @@ int main() {
     ConfigurationParser config;
     try {
         config = ConfigurationParser();
+    
     } catch (const std::runtime_error& e) {
         std::println(stderr, "configuration error: {}", e.what());
         return 1;
+    
     }
+
+    
 
     // start
     auto service = config.get_service_configuration();
