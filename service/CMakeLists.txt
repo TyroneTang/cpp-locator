@@ -21,6 +21,7 @@ FetchContent_MakeAvailable(questdb_client)
 
 
 find_package(Drogon CONFIG REQUIRED)
+find_package(redis++ CONFIG REQUIRED)
 
 #We're using the project name as the target name, but you can change it to make them different.
 #With this setup, the name of the executable will be the same as the project name.
@@ -31,9 +32,12 @@ target_sources(${PROJECT_NAME}
         FILE_SET CXX_MODULES FILES
         src/configurations/configuration.cppm
         src/configurations/models.cppm
+        # src/redis/redis.cppm
 )
+
 target_link_libraries(${PROJECT_NAME} PRIVATE 
         Drogon::Drogon
+        redis++::redis++
         questdb_client   # ILP writes
         pq               # libpq for reads (apt install libpq-dev)
 )

@@ -1,5 +1,6 @@
 module;
 
+#include <cstdint>
 #include <cstdlib>
 #include <string>
 #include <print>
@@ -7,7 +8,9 @@ module;
 
 export module configuration;
 
-import models;
+export import models;
+
+namespace configuration {
 
 std::string read_env(const char* name) {
     // inherited from c, there is no std::string, hence use char* for string.
@@ -21,7 +24,7 @@ std::string read_env(const char* name) {
     return val;
 };
 
-int parse_port(const std::string& value) {
+std::uint16_t parse_port(const std::string& value) {
     int val = std::stoi(value);
 
     if (val < 1 || val > 65535) {
@@ -30,25 +33,27 @@ int parse_port(const std::string& value) {
         );
     }
 
-    return val;
+    return static_cast<uint16_t>(val);
 }
+
+} // namespace configuration (internal, non-exported helpers)
 
 export namespace configuration {
     class ConfigurationParser {
     private:
         // service
         std::string service_ip;
-        int service_port;
+        std::uint16_t service_port;
         
         // redis cache
         std::string redis_ip;
-        int redis_port;
+        std::uint16_t redis_port;
         std::string redis_username;
         std::string redis_password;
 
         // database
         std::string qdb_ip;
-        int qdb_port;
+        std::uint16_t qdb_port;
         std::string qdb_username;
         std::string qdb_password;
 
@@ -71,15 +76,15 @@ export namespace configuration {
             qdb_password = read_env("QDB_PASSWORD");
         }
 
-        ServiceConfig get_service_configuration() {
-            return ServiceConfig {
+        models::ServiceConfig get_service_configuration() {
+            return models::ServiceConfig {
                 .ip_address = service_ip,
                 .port = service_port,
             };
         }
 
-        RedisConfig get_redis_configuration() {
-            return RedisConfig {
+        models::RedisConfig get_redis_configuration() {
+            return models::RedisConfig {
                 .ip_address = redis_ip,
                 .port = redis_port,
                 .username = redis_username,
@@ -87,8 +92,8 @@ export namespace configuration {
             };
         }
 
-        QDBConfig get_qdb_configuration() {
-            return QDBConfig {
+        models::QDBConfig get_qdb_configuration() {
+            return models::QDBConfig {
                 .ip_address = qdb_ip,
                 .port = qdb_port,
                 .username = qdb_username,
@@ -97,66 +102,3 @@ export namespace configuration {
         }
     };
 }
-
-// export class ConfigurationParser {
-//     private:
-//         // service
-//         std::string service_ip;
-//         std::uint16_t service_port;
-        
-//         // redis cache
-//         std::string redis_ip;
-//         std::uint16_t redis_port;
-//         std::string redis_username;
-//         std::string redis_password;
-
-//         // database
-//         std::string qdb_ip;
-//         std::uint16_t qdb_port;
-//         std::string qdb_username;
-//         std::string qdb_password;
-
-//     public:
-//         ConfigurationParser() {
-//             std::println("initializing configuration parser...");
-
-//             // extract env var
-//             service_ip = read_env("SERVICE_IP");
-//             service_port = parse_port(read_env("SERVICE_PORT"));
-
-//             redis_ip = read_env("REDIS_IP");
-//             redis_port = parse_port(read_env("REDIS_PORT"));
-//             redis_username = read_env("REDIS_USERNAME");
-//             redis_password = read_env("REDIS_PASSWORD");
-
-//             qdb_ip = read_env("QDB_IP");
-//             qdb_port = parse_port(read_env("QDB_PORT"));
-//             qdb_username = read_env("QDB_USERNAME");
-//             qdb_password = read_env("QDB_PASSWORD");
-//         }
-
-//         ServiceConfig get_service_configuration() {
-//             return ServiceConfig {
-//                 .ip_address = service_ip,
-//                 .port = service_port,
-//             };
-//         }
-
-//         RedisConfig get_redis_configuration() {
-//             return RedisConfig {
-//                 .ip_address = redis_ip,
-//                 .port = redis_port,
-//                 .username = redis_username,
-//                 .password = redis_password, 
-//             };
-//         }
-
-//         QDBConfig get_qdb_configuration() {
-//             return QDBConfig {
-//                 .ip_address = qdb_ip,
-//                 .port = qdb_port,
-//                 .username = qdb_username,
-//                 .password = qdb_password
-//             };
-//         }
-// };
