@@ -10,7 +10,7 @@ int main() {
         3. start the redis connection
         4. start the application server
     */
-    ConfigurationParser config;
+    configuration::ConfigurationParser config;
     try {
         config = ConfigurationParser();
     
@@ -23,7 +23,7 @@ int main() {
     
 
     // start
-    auto service = config.get_service_configuration();
+    configuration::ConfigurationParser service = config.get_service_configuration();
     drogon::app().addListener(service.ip_address, service.port);
     std::println("running app on {}:{}", service.ip_address, service.port);
     drogon::app().run();

@@ -1,6 +1,5 @@
 module;
 
-#include <cstdint>
 #include <cstdlib>
 #include <string>
 #include <print>
@@ -22,7 +21,7 @@ std::string read_env(const char* name) {
     return val;
 };
 
-std::uint16_t parse_port(const std::string& value) {
+int parse_port(const std::string& value) {
     int val = std::stoi(value);
 
     if (val < 1 || val > 65535) {
@@ -31,24 +30,25 @@ std::uint16_t parse_port(const std::string& value) {
         );
     }
 
-    return static_cast<uint16_t>(val);
+    return val;
 }
 
-export class ConfigurationParser {
+export namespace configuration {
+    class ConfigurationParser {
     private:
         // service
         std::string service_ip;
-        std::uint16_t service_port;
+        int service_port;
         
         // redis cache
         std::string redis_ip;
-        std::uint16_t redis_port;
+        int redis_port;
         std::string redis_username;
         std::string redis_password;
 
         // database
         std::string qdb_ip;
-        std::uint16_t qdb_port;
+        int qdb_port;
         std::string qdb_username;
         std::string qdb_password;
 
@@ -95,4 +95,68 @@ export class ConfigurationParser {
                 .password = qdb_password
             };
         }
-};
+    };
+}
+
+// export class ConfigurationParser {
+//     private:
+//         // service
+//         std::string service_ip;
+//         std::uint16_t service_port;
+        
+//         // redis cache
+//         std::string redis_ip;
+//         std::uint16_t redis_port;
+//         std::string redis_username;
+//         std::string redis_password;
+
+//         // database
+//         std::string qdb_ip;
+//         std::uint16_t qdb_port;
+//         std::string qdb_username;
+//         std::string qdb_password;
+
+//     public:
+//         ConfigurationParser() {
+//             std::println("initializing configuration parser...");
+
+//             // extract env var
+//             service_ip = read_env("SERVICE_IP");
+//             service_port = parse_port(read_env("SERVICE_PORT"));
+
+//             redis_ip = read_env("REDIS_IP");
+//             redis_port = parse_port(read_env("REDIS_PORT"));
+//             redis_username = read_env("REDIS_USERNAME");
+//             redis_password = read_env("REDIS_PASSWORD");
+
+//             qdb_ip = read_env("QDB_IP");
+//             qdb_port = parse_port(read_env("QDB_PORT"));
+//             qdb_username = read_env("QDB_USERNAME");
+//             qdb_password = read_env("QDB_PASSWORD");
+//         }
+
+//         ServiceConfig get_service_configuration() {
+//             return ServiceConfig {
+//                 .ip_address = service_ip,
+//                 .port = service_port,
+//             };
+//         }
+
+//         RedisConfig get_redis_configuration() {
+//             return RedisConfig {
+//                 .ip_address = redis_ip,
+//                 .port = redis_port,
+//                 .username = redis_username,
+//                 .password = redis_password, 
+//             };
+//         }
+
+//         QDBConfig get_qdb_configuration() {
+//             return QDBConfig {
+//                 .ip_address = qdb_ip,
+//                 .port = qdb_port,
+//                 .username = qdb_username,
+//                 .password = qdb_password
+//             };
+//         }
+// };

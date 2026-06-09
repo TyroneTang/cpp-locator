@@ -43,16 +43,10 @@
         "vadimcn.vscode-lldb",
         "ms-azuretools.vscode-docker",
         "docker.docker",
-        "anthropic.claude-code"
+        "anthropic.claude-code",
+        "Google.geminicodeassist",
+        "google.gemini-cli-vscode-ide-companion"
       ]
-      // "settings": {
-      //   "editor.formatOnSave": true,
-      //   "C_Cpp.intelliSenseEngine": "disabled",
-      //   "clangd.path": "/usr/bin/clangd",
-      //   "clangd.arguments": [
-      //     "--compile-commands-dir=${workspaceFolder}/build/linux-clang"
-      //   ]
-      // }
     }
   }
 }
