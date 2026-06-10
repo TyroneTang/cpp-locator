@@ -1,7 +1,9 @@
 #include <drogon/HttpAppFramework.h>
 #include <print>
+#include <stdexcept>
 
 import configuration;
+import redis;
 
 int main() {
     /**
@@ -21,6 +23,11 @@ int main() {
     }
 
     // connect to the redis endpoint
+    try {
+
+    } catch (const std::runtime_error& e) {
+        std::println(stderr, "redis error: {}", e.what());
+    }
     
 
     

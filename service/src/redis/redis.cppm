@@ -1,18 +1,19 @@
 module;
 
+#include <optional>
 #include <sw/redis++/redis++.h>
 #include <cstdint>
 #include <format>
 #include <print>
 
-using namespace sw::redis;
-
 export module redis;
+
+using namespace sw::redis;
 
 export namespace redis {
     class RedisClient{
         private:
-            sw::redis::Redis: client;
+            std::optional<sw::redis::Redis> client = std::nullopt;
         public:
             ~RedisClient();
 
@@ -22,7 +23,7 @@ export namespace redis {
                 sw::redis::ConnectionOptions options;
                 options.host = std::string(ip_address);
                 options.port = port;
-                options.username = username;
+                options.user = username;
                 options.password = password;
 
 
@@ -32,7 +33,8 @@ export namespace redis {
                 client = sw::redis::Redis(options);
 
                 // test connection
-                std::println("Ping redis : {}", client.ping());
+                // directly unwarp() since it is guaranteed.
+                std::println("Ping redis : {}", client->ping());
 
 
             } catch (sw::redis::Error& e) {
@@ -40,5 +42,14 @@ export namespace redis {
                 throw std::runtime_error(std::format("Redis connection error: {}", e.what()));
             }
         };
+
+        sw::redis::Redis& get_client() {
+            if (!client.has_value()) {
+                throw std::runtime_error("Missing Redis client!");
+            }
+
+            // returns reference to the obj.
+            return *client;
+        }
     };
 };
