@@ -15,8 +15,6 @@ export namespace redis {
         private:
             std::optional<sw::redis::Redis> client = std::nullopt;
         public:
-            ~RedisClient();
-
         void connect(std::string_view ip_address, std::uint16_t port, std::string_view username, std::string_view password) {
             try {
                 std::println("connecting to redis at {}:{}", ip_address, port);

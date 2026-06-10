@@ -24,9 +24,19 @@ int main() {
 
     // connect to the redis endpoint
     try {
+        redis::RedisClient redis = redis::RedisClient();
+        configuration::models::RedisConfig redis_config = config.get_redis_configuration();
+
+        redis.connect(
+            redis_config.ip_address,
+            redis_config.port,
+            redis_config.username,
+            redis_config.password
+        );
+
 
     } catch (const std::runtime_error& e) {
-        std::println(stderr, "redis error: {}", e.what());
+        std::println(stderr, "Failed to connect to Redis! redis error: {}", e.what());
     }
     
 
