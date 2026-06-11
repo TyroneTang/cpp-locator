@@ -40,7 +40,7 @@ services:
       REDIS_PASSWORD: redis-12345
       REDIS_USERNAME: redispassword
     volumes:
-      - $PWD/redisdb/data:/data
+      - $PWD/redis/data:/data
     command:
       - redis-server
       - --requirepass
@@ -53,9 +53,9 @@ services:
       - "&*"
       - "+@all"
 
-  questdb:
-    container_name: questdb-locator
-    image: localhost/questdb:9.3.5
+  mongodb:
+    container_name: mongo-locator
+    image: localhost/mongo:7.0.28
     network_mode: "host"
     tty: true
     stdin_open: true
@@ -66,14 +66,42 @@ services:
     cap_add:
       - ALL
     environment:
-      # Auth — QDB_ prefix maps to server.conf keys (dots → underscores)
-      - QDB_PG_USER=${QUESTDB_USERNAME}
-      - QDB_PG_PASSWORD=${QUESTDB_PASSWORD}
-      # Memory (adjust to your machine)
-      - JVM_PREPEND=-Xms512m -Xmx2g
-      # Workers
-      - QDB_SHARED_WORKER_COUNT=2
-      - QDB_PG_WORKER_COUNT=1
-      - QDB_LINE_TCP_WRITER_WORKER_COUNT=1
+      MONGO_INITDB_ROOT_USERNAME: mongodb
+      MONGO_INITDB_ROOT_PASSWORD: mongodb-123
     volumes:
-      - $PWD/questdb/data:/var/lib/questdb
+      - $PWD/mongodb/storage/configdb:/data/configdb
+      - $PWD/mongodb/storage/db:/data/db
+
+  redis_insight:
+    container_name: redis_insight-locator
+    image: redis/redisinsight:2.70.1
+    network_mode: "host"
+    volumes:
+      - $PWD/redis_insight/data:/data
+    user: root
+
+
+  # questdb:
+  #   container_name: questdb-locator
+  #   image: localhost/questdb:9.3.5
+  #   network_mode: "host"
+  #   tty: true
+  #   stdin_open: true
+  #   privileged: true
+  #   restart: unless-stopped
+  #   security_opt:
+  #     - seccomp:unconfined
+  #   cap_add:
+  #     - ALL
+  #   environment:
+  #     # Auth — QDB_ prefix maps to server.conf keys (dots → underscores)
+  #     - QDB_PG_USER=${QUESTDB_USERNAME}
+  #     - QDB_PG_PASSWORD=${QUESTDB_PASSWORD}
+  #     # Memory (adjust to your machine)
+  #     - JVM_PREPEND=-Xms512m -Xmx2g
+  #     # Workers
+  #     - QDB_SHARED_WORKER_COUNT=2
+  #     - QDB_PG_WORKER_COUNT=1
+  #     - QDB_LINE_TCP_WRITER_WORKER_COUNT=1
+  #   volumes:
+  #     - $PWD/questdb/data:/var/lib/questdb

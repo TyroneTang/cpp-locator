@@ -21,6 +21,8 @@ FetchContent_MakeAvailable(questdb_client)
 
 
 find_package(Drogon CONFIG REQUIRED)
+find_package(bsoncxx CONFIG REQUIRED)
+find_package(mongocxx CONFIG REQUIRED)
 find_package(redis++ CONFIG REQUIRED)
 
 #We're using the project name as the target name, but you can change it to make them different.
@@ -32,12 +34,15 @@ target_sources(${PROJECT_NAME}
         FILE_SET CXX_MODULES FILES
         src/configurations/configuration.cppm
         src/configurations/models.cppm
+        # src/mongodb/mongodb.cppm
         src/redis/redis.cppm
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE 
         Drogon::Drogon
         redis++::redis++
+        mongo::bsoncxx_shared
+        mongo::mongocxx_shared
         questdb_client   # ILP writes
         pq               # libpq for reads (apt install libpq-dev)
 )

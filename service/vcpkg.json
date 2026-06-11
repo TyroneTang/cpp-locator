@@ -1,17 +1,22 @@
 {
   "name": "locator",
   "version": "0.1.0",
+  "builtin-baseline": "4e08971f3ddc13018ca858a692efe92d3b6b9fce",
   "dependencies": [
     {
       "name": "drogon",
       "default-features": false,
-      "features": ["ctl"]
+      "features": [
+        "ctl"
+      ]
     },
     {
       "name": "redis-plus-plus",
       "default-features": false,
-      "features": ["async"]
-    }
-  ],
-  "builtin-baseline": "4e08971f3ddc13018ca858a692efe92d3b6b9fce"
+      "features": [
+        "async"
+      ]
+    },
+    "mongo-cxx-driver"
+  ]
 }
