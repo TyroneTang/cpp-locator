@@ -36,7 +36,7 @@ export namespace mongodb {
                     auto admin_db = (*client)["admin"];
                     admin_db.run_command(bsoncxx::builder::basic::make_document(bsoncxx::builder::basic::kvp("ping", 1)));
 
-                    std::println("successfully authenticated and connected to MongoDB!")
+                    std::println("successfully authenticated and connected to MongoDB!");
 
 
                 } catch (std::exception& e) {
@@ -44,5 +44,13 @@ export namespace mongodb {
                 }
             }
 
-    }
+            mongocxx::client& get_client() {
+                if (!client.has_value()){
+                    std::println("MongoDB Client is not initialized!");
+                    throw std::runtime_error("MongoDB Client is not initialized!");
+                }
+
+                return *client;
+            };
+    };
 };

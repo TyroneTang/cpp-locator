@@ -57,6 +57,12 @@ export namespace configuration {
         std::string qdb_username;
         std::string qdb_password;
 
+        // mongodb
+        std::string mongodb_ip;
+        std::uint16_t mongodb_port;
+        std::string mongodb_username;
+        std::string mongodb_password;
+
     public:
         ConfigurationParser() {
             std::println("initializing configuration parser...");
@@ -74,6 +80,11 @@ export namespace configuration {
             qdb_port = parse_port(read_env("QDB_PORT"));
             qdb_username = read_env("QDB_USERNAME");
             qdb_password = read_env("QDB_PASSWORD");
+
+            mongodb_ip = read_env("MONGODB_IP");
+            mongodb_port = parse_port(read_env("MONGODB_PORT"));
+            mongodb_username = read_env("MONGODB_USERNAME");
+            mongodb_password = read_env("MONGODB_PASSWORD");
         }
 
         models::ServiceConfig get_service_configuration() {
@@ -98,6 +109,15 @@ export namespace configuration {
                 .port = qdb_port,
                 .username = qdb_username,
                 .password = qdb_password
+            };
+        }
+
+        models::MongodbConfig get_mongodb_configuration() {
+            return models::MongodbConfig {
+                .ip_address = mongodb_ip,
+                .port = mongodb_port,
+                .username = mongodb_username,
+                .password = mongodb_password
             };
         }
     };

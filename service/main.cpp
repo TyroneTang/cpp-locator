@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 import configuration;
+import mongodb;
 import redis;
 
 int main() {
@@ -22,6 +23,22 @@ int main() {
     
     }
 
+    // conenect to mongodb endpoint
+    try { 
+        mongodb::MongoClient mongodb = mongodb::MongoClient();
+        configuration::models::MongodbConfig mongodb_config = config.get_mongodb_configuration();
+        mongodb.connect(
+            mongodb_config.ip_address, 
+            mongodb_config.port, 
+            mongodb_config.username, 
+            mongodb_config.password
+        );
+
+    } catch (const std::runtime_error& e) {
+        std::println(stderr, "Failed to connect to MongoDB! Details : {}", e.what());
+        return 1;
+    }
+
     // connect to the redis endpoint
     try {
         redis::RedisClient redis = redis::RedisClient();
@@ -37,11 +54,11 @@ int main() {
 
     } catch (const std::runtime_error& e) {
         std::println(stderr, "Failed to connect to Redis! redis error: {}", e.what());
+        return 1;
     }
     
 
     
-
     // start
     configuration::models::ServiceConfig service = config.get_service_configuration();
     drogon::app().addListener(service.ip_address, service.port);

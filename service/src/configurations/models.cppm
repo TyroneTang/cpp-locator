@@ -22,4 +22,10 @@ export namespace configuration::models {
         const std::string& username;
         const std::string& password;
     };
+    struct MongodbConfig {
+        const std::string& ip_address;
+        const std::uint16_t port;
+        const std::string& username;
+        const std::string& password;
+    };
 }
