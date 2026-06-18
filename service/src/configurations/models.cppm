@@ -28,4 +28,11 @@ export namespace configuration::models {
         const std::string& username;
         const std::string& password;
     };
+    struct MQTTConfig {
+        const std::string& ip_address;
+        const std::uint16_t port;
+        const std::string& username;
+        const std::string& password;
+        const std::string& client_id;
+    };
 }

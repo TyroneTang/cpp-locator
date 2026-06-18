@@ -17,6 +17,8 @@
         "async"
       ]
     },
-    "mongo-cxx-driver"
+    "mongo-cxx-driver",
+    "paho-mqtt",
+    "paho-mqttpp3"
   ]
 }

@@ -63,6 +63,13 @@ export namespace configuration {
         std::string mongodb_username;
         std::string mongodb_password;
 
+        // mqtt
+        std::string mqtt_ip;
+        std::uint16_t mqtt_port;
+        std::string mqtt_username;
+        std::string mqtt_password;
+        std::string mqtt_client_id;
+
     public:
         ConfigurationParser() {
             std::println("initializing configuration parser...");
@@ -85,6 +92,12 @@ export namespace configuration {
             mongodb_port = parse_port(read_env("MONGODB_PORT"));
             mongodb_username = read_env("MONGODB_USERNAME");
             mongodb_password = read_env("MONGODB_PASSWORD");
+
+            mqtt_ip = read_env("MQTT_IP");
+            mqtt_port = parse_port(read_env("MQTT_PORT"));
+            mqtt_username = read_env("MQTT_USERNAME");
+            mqtt_password = read_env("MQTT_PASSWORD");
+            mqtt_client_id = read_env("MQTT_CLIENT_ID");
         }
 
         models::ServiceConfig get_service_configuration() {
@@ -118,6 +131,16 @@ export namespace configuration {
                 .port = mongodb_port,
                 .username = mongodb_username,
                 .password = mongodb_password
+            };
+        }
+
+        models::MQTTConfig get_mqtt_configuration() {
+            return models::MQTTConfig {
+                .ip_address = mqtt_ip,
+                .port = mqtt_port,
+                .username = mqtt_username,
+                .password = mqtt_password,
+                .client_id = mqtt_client_id,
             };
         }
     };

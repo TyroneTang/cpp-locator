@@ -24,6 +24,7 @@ find_package(Drogon CONFIG REQUIRED)
 find_package(bsoncxx CONFIG REQUIRED)
 find_package(mongocxx CONFIG REQUIRED)
 find_package(redis++ CONFIG REQUIRED)
+find_package(PahoMqttCpp REQUIRED)
 
 #We're using the project name as the target name, but you can change it to make them different.
 #With this setup, the name of the executable will be the same as the project name.
@@ -45,6 +46,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         mongo::mongocxx_shared
         questdb_client   # ILP writes
         pq               # libpq for reads (apt install libpq-dev)
+        PahoMqttCpp::paho-mqttpp3      # C++ async wrapper (pulls in the C lib transitively)
 )
 
 target_compile_options(${PROJECT_NAME} PRIVATE
